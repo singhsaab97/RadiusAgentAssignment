@@ -13,8 +13,8 @@ final class FacilitiesDataHandler {
     /// Determines the state of response
     enum State {
         case loading
-        case data(ResponseData)
-        case error
+        case response(ResponseModel)
+        case error(String)
     }
     
     private lazy var apiClient: MoyaProvider<FacilitiesAPIConstructor> = {
@@ -27,12 +27,13 @@ final class FacilitiesDataHandler {
 extension FacilitiesDataHandler {
     
     func fetchData(completion: @escaping (State) -> Void) {
+        completion(.loading)
         apiClient.request(.facilitiesList) { [weak self] result in
             switch result {
             case let .success(response):
-                self?.decodeData(from: response)
+                self?.decodeData(from: response, completion: completion)
             case let .failure(error):
-                print("Error \(error)")
+                completion(.error(error.localizedDescription))
             }
         }
     }
@@ -42,13 +43,13 @@ extension FacilitiesDataHandler {
 // MARK: - Private Helpers
 private extension FacilitiesDataHandler {
     
-    func decodeData(from response: Response) {
+    func decodeData(from response: Response, completion: @escaping (State) -> Void) {
         do {
             let decoder = JSONDecoder()
-            let data = try decoder.decode(ResponseData.self, from: response.data)
-            print("Model \(data)")
+            let model = try decoder.decode(ResponseModel.self, from: response.data)
+            completion(.response(model))
         } catch {
-            print("Error deserializing JSON: \(error)")
+            completion(.error(error.localizedDescription))
         }
     }
     

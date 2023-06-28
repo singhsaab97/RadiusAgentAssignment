@@ -1,5 +1,5 @@
 //
-//  Facility.swift
+//  ResponseModel.swift
 //  FacilitiesApp
 //
 //  Created by Abhijit Singh on 28/06/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResponseData: Codable {
+struct ResponseModel: Codable {
     let facilities: [FacilityDetail]
     let exclusions: [[Exclusion]]
 }

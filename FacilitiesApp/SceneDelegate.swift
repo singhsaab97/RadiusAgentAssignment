@@ -54,8 +54,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 private extension SceneDelegate {
     
     func launch() {
-        let viewController = FacilitiesViewController.loadFromStoryboard()
-        viewController.viewModel = FacilitiesViewModel()
+        let viewModel = FacilitiesViewModel()
+        let viewController = FacilitiesViewController(viewModel: viewModel)
+        viewModel.presenter = viewController
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .fullScreen
         navigationController.modalPresentationCapturesStatusBarAppearance = true
