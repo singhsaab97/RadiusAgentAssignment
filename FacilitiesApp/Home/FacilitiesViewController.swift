@@ -24,6 +24,7 @@ final class FacilitiesViewController: UIViewController {
         view.rowHeight = UITableView.automaticDimension
         view.delegate = self
         view.dataSource = self
+        FacilityOptionTableViewCell.register(for: view)
         return view
     }()
     
@@ -55,19 +56,8 @@ private extension FacilitiesViewController {
     
     func setup() {
         view.backgroundColor = Style.backgroundColor
-        addBookButton()
         addTableView()
         viewModel.screenDidLoad()
-    }
-    
-    func addBookButton() {
-        let bookButton = UIBarButtonItem(
-            title: viewModel.bookButtonTitle,
-            style: .plain,
-            target: self,
-            action: #selector(bookButtonTapped)
-        )
-        navigationItem.rightBarButtonItem = bookButton
     }
     
     func addTableView() {
@@ -77,27 +67,33 @@ private extension FacilitiesViewController {
         }
     }
     
-    @objc
-    func bookButtonTapped() {
-        
-    }
-    
 }
 
 // MARK: - UITableViewDelegate Methods
 extension FacilitiesViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return viewModel.getHeader(for: section)
+    }
     
 }
 
 // MARK: - UITableViewDataSource Methods
 extension FacilitiesViewController: UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.numberOfSections
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return viewModel.getNumberOfRows(in: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        guard let cellViewModel = viewModel.getCellViewModel(at: indexPath) else { return UITableViewCell() }
+        let optionCell = FacilityOptionTableViewCell.dequeReusableCell(from: tableView, at: indexPath)
+        optionCell.configure(with: cellViewModel)
+        return optionCell
     }
     
 }
@@ -120,6 +116,10 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
     func stopLoading() {
         spinnerView.stopAnimating()
         spinnerView.removeFromSuperview()
+    }
+    
+    func reload() {
+        tableView.reloadData()
     }
     
 }
