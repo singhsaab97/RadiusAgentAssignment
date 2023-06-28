@@ -13,4 +13,10 @@ protocol FacilitiesViewModelable {
 
 final class FacilitiesViewModel: FacilitiesViewModelable {
     
+    private let dataHandler: FacilitiesDataHandler
+    
+    init() {
+        dataHandler = FacilitiesDataHandler()
+    }
+    
 }
