@@ -12,6 +12,7 @@ final class FacilitiesViewController: UIViewController {
     
     private struct Style {
         static let backgroundColor = UIColor.systemBackground
+        
         static let tableViewBackgroundColor = UIColor.clear
     }
         
@@ -76,6 +77,10 @@ extension FacilitiesViewController: UITableViewDelegate {
         return viewModel.getHeader(for: section)
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.didSelectOption(at: indexPath)
+    }
+    
 }
 
 // MARK: - UITableViewDataSource Methods
@@ -116,6 +121,10 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
     func stopLoading() {
         spinnerView.stopAnimating()
         spinnerView.removeFromSuperview()
+    }
+    
+    func reloadOptions(at indexPaths: [IndexPath]) {
+        tableView.reloadRows(at: indexPaths, with: .fade)
     }
     
     func reload() {

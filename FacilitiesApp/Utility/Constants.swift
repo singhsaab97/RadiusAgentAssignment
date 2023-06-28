@@ -10,7 +10,7 @@ import Foundation
 struct Constants {
     
     static let facilitiesTitle = "Facilities"
-    static let bookButtonTitle = "Book"
+    static let unavailableTitle = "Unavailable"
     static let baseApiURL = URL(string: "https://my-json-server.typicode.com/")
     static let commonApiHeaders = ["Content-Type": "application/json"]
     

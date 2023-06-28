@@ -25,7 +25,8 @@ struct FacilityDetail: Codable {
     
 }
 
-struct FacilityOption: Codable {
+struct FacilityOption: Codable,
+                       Equatable {
     let id: String
     let name: String
     let icon: String
