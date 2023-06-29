@@ -9,6 +9,8 @@ import Foundation
 
 protocol FacilitiesViewModelPresenter: AnyObject {
     func setNavigationTitle(_ title: String)
+    func updateSelectButtonTitle()
+    func updateConfirmButtonState()
     func startLoading()
     func stopLoading()
     func reloadOptions(at indexPaths: [IndexPath])
@@ -16,9 +18,14 @@ protocol FacilitiesViewModelPresenter: AnyObject {
 }
 
 protocol FacilitiesViewModelable {
+    var selectButtonTitle: String { get }
+    var confirmButtonTitle: String { get }
+    var isConfirmButtonEnabled: Bool { get }
     var numberOfSections: Int { get }
     var presenter: FacilitiesViewModelPresenter? { get set }
     func screenDidLoad()
+    func selectButtonTapped()
+    func confirmButtonTapped()
     func getNumberOfRows(in section: Int) -> Int
     func getHeader(for section: Int) -> String?
     func getCellViewModel(at indexPath: IndexPath) -> FacilityOptionCellViewModelable?
@@ -33,9 +40,14 @@ final class FacilitiesViewModel: FacilitiesViewModelable {
     private var exclusions: [[Exclusion]]
     
     /// Keep a track of every selected option to its corresponding facility id
-    private var selectedOptionsDict: [String: FacilityOption]
+    private var selectedOptionsDict: [String: FacilityOption] {
+        didSet {
+            presenter?.updateConfirmButtonState()
+        }
+    }
     /// Keep a track of every excluded option
     private var excludedOptions: [FacilityOption]
+    private var isSelectionEnabled: Bool
     
     private let dataHandler: FacilitiesDataHandler
     
@@ -44,6 +56,7 @@ final class FacilitiesViewModel: FacilitiesViewModelable {
         self.exclusions = []
         self.selectedOptionsDict = [:]
         self.excludedOptions = []
+        self.isSelectionEnabled = true
         dataHandler = FacilitiesDataHandler()
     }
     
@@ -51,6 +64,18 @@ final class FacilitiesViewModel: FacilitiesViewModelable {
 
 // MARK: - Exposed Helpers
 extension FacilitiesViewModel {
+    
+    var selectButtonTitle: String {
+        return isSelectionEnabled ? Constants.cancelTitle : Constants.selectTitle
+    }
+    
+    var confirmButtonTitle: String {
+        return Constants.confirmTitle
+    }
+    
+    var isConfirmButtonEnabled: Bool {
+        return !selectedOptionsDict.isEmpty
+    }
     
     var numberOfSections: Int {
         return facilities.count
@@ -76,6 +101,16 @@ extension FacilitiesViewModel {
         presenter?.setNavigationTitle(Constants.facilitiesTitle)
     }
     
+    func selectButtonTapped() {
+        isSelectionEnabled = !isSelectionEnabled
+        presenter?.updateSelectButtonTitle()
+        presenter?.reload()
+    }
+    
+    func confirmButtonTapped() {
+        // TODO
+    }
+    
     func getNumberOfRows(in section: Int) -> Int {
         guard let facility = facilities[safe: section] else { return 0 }
         return facility.options.count
@@ -90,7 +125,9 @@ extension FacilitiesViewModel {
         guard let facility = facilities[safe: indexPath.section],
               let option = facility.options[safe: indexPath.item] else { return nil }
         var state = FacilityOptionCellViewModel.State.deselected
-        if excludedOptions.contains(option) {
+        if !isSelectionEnabled {
+            state = .idle
+        } else if excludedOptions.contains(option) {
             state = .disabled
         } else if selectedOptionsDict[facility.id] == option {
             state = .selected
@@ -99,7 +136,8 @@ extension FacilitiesViewModel {
     }
     
     func didSelectOption(at indexPath: IndexPath) {
-        guard let facility = facilities[safe: indexPath.section],
+        guard isSelectionEnabled,
+              let facility = facilities[safe: indexPath.section],
               let option = facility.options[safe: indexPath.item] else { return }
         if selectedOptionsDict.contains(where: { $0.key == facility.id }) {
             // Check for unique selection within a facility

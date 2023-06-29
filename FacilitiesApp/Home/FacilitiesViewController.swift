@@ -13,10 +13,35 @@ final class FacilitiesViewController: UIViewController {
     private struct Style {
         static let backgroundColor = UIColor.systemBackground
         
+        static let actionButtonTintColor = Constants.primaryColor
+        
         static let tableViewBackgroundColor = UIColor.clear
     }
         
     private let viewModel: FacilitiesViewModelable
+    
+    private lazy var selectButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            title: viewModel.selectButtonTitle,
+            style: .plain,
+            target: self,
+            action: #selector(selectButtonTapped)
+        )
+        button.tintColor = Style.actionButtonTintColor
+        return button
+    }()
+    
+    private lazy var confirmButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            title: viewModel.confirmButtonTitle,
+            style: .done,
+            target: self,
+            action: #selector(confirmButtonTapped)
+        )
+        button.tintColor = Style.actionButtonTintColor
+        button.isEnabled = viewModel.isConfirmButtonEnabled
+        return button
+    }()
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .plain)
@@ -57,8 +82,14 @@ private extension FacilitiesViewController {
     
     func setup() {
         view.backgroundColor = Style.backgroundColor
+        addActionButtons()
         addTableView()
         viewModel.screenDidLoad()
+    }
+    
+    func addActionButtons() {
+        navigationItem.leftBarButtonItem = selectButton
+        navigationItem.rightBarButtonItem = confirmButton
     }
     
     func addTableView() {
@@ -66,6 +97,16 @@ private extension FacilitiesViewController {
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+    
+    @objc
+    func selectButtonTapped() {
+        viewModel.selectButtonTapped()
+    }
+    
+    @objc
+    func confirmButtonTapped() {
+        viewModel.confirmButtonTapped()
     }
     
 }
@@ -78,6 +119,7 @@ extension FacilitiesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         viewModel.didSelectOption(at: indexPath)
     }
     
@@ -108,6 +150,14 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
     
     func setNavigationTitle(_ title: String) {
         navigationItem.title = title
+    }
+    
+    func updateSelectButtonTitle() {
+        selectButton.title = viewModel.selectButtonTitle
+    }
+    
+    func updateConfirmButtonState() {
+        confirmButton.isEnabled = viewModel.isConfirmButtonEnabled
     }
     
     func startLoading() {

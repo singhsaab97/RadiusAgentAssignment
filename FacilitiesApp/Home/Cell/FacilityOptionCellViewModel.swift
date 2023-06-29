@@ -14,7 +14,13 @@ protocol FacilityOptionCellViewModelable {
 
 final class FacilityOptionCellViewModel: FacilityOptionCellViewModelable {
     
+    /// Determines the state of the option cell
+    /// - `idle`: When cell is interactive but selection isn't allowed
+    /// - `selected`: When cell is interactive and selected
+    /// - `deselected`: When cell is interactive and deselected
+    /// - `disabled`: When cell is non-interactive and greyed out
     enum State {
+        case idle
         case selected
         case deselected
         case disabled
@@ -37,14 +43,14 @@ extension FacilityOptionCellViewModel.State {
         switch self {
         case .selected, .deselected:
             return false
-        case .disabled:
+        case .idle, .disabled:
             return true
         }
     }
     
     var isUnavailableLabelHidden: Bool {
         switch self {
-        case .selected, .deselected:
+        case .idle, .selected, .deselected:
             return true
         case .disabled:
             return false
@@ -53,7 +59,7 @@ extension FacilityOptionCellViewModel.State {
     
     var unavailableText: String? {
         switch self {
-        case .selected, .deselected:
+        case .idle, .selected, .deselected:
             return nil
         case .disabled:
             return Constants.unavailableTitle
@@ -62,7 +68,7 @@ extension FacilityOptionCellViewModel.State {
     
     var isUserInteractionEnabled: Bool {
         switch self {
-        case .selected, .deselected:
+        case .idle, .selected, .deselected:
             return true
         case .disabled:
             return false

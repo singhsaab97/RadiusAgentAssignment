@@ -14,7 +14,7 @@ final class FacilityOptionTableViewCell: UITableViewCell,
     static let identifier = String(describing: FacilityOptionTableViewCell.self)
     
     fileprivate struct Style {
-        static let selectionViewSelectedBorderColor = UIColor(red: 35 / 255, green: 166 / 255, blue: 247 / 255, alpha: 1)
+        static let selectionViewSelectedBorderColor = Constants.primaryColor
         static let selectionViewDeselectedBorderColor = UIColor.systemGray2
         static let selectionViewDisabledBorderColor = UIColor.clear
         
@@ -104,7 +104,7 @@ private extension FacilityOptionCellViewModel.State {
             return FacilityOptionTableViewCell.Style.selectionViewSelectedBorderColor
         case .deselected:
             return FacilityOptionTableViewCell.Style.selectionViewDeselectedBorderColor
-        case .disabled:
+        case .idle, .disabled:
             return FacilityOptionTableViewCell.Style.selectionViewDisabledBorderColor
         }
     }
@@ -115,14 +115,14 @@ private extension FacilityOptionCellViewModel.State {
             return FacilityOptionTableViewCell.Style.selectionFillViewSelectedBackgroundColor
         case .deselected:
             return FacilityOptionTableViewCell.Style.selectionFillViewDeselectedBackgroundColor
-        case .disabled:
+        case .idle, .disabled:
             return FacilityOptionTableViewCell.Style.selectionFillViewDisabledBackgroundColor
         }
     }
     
     var optionImageTintColor: UIColor {
         switch self {
-        case .selected, .deselected:
+        case .idle, .selected, .deselected:
             return FacilityOptionTableViewCell.Style.optionImageDefaultTintColor
         case .disabled:
             return FacilityOptionTableViewCell.Style.optionImageDisabledTintColor
@@ -131,7 +131,7 @@ private extension FacilityOptionCellViewModel.State {
     
     var nameLabelTextColor: UIColor {
         switch self {
-        case .selected, .deselected:
+        case .idle, .selected, .deselected:
             return FacilityOptionTableViewCell.Style.nameLabelDefaultTextColor
         case .disabled:
             return FacilityOptionTableViewCell.Style.nameLabelDisabledTextColor
@@ -140,7 +140,7 @@ private extension FacilityOptionCellViewModel.State {
     
     var unavailableLabelTextColor: UIColor {
         switch self {
-        case .selected, .deselected:
+        case .idle, .selected, .deselected:
             return FacilityOptionTableViewCell.Style.unavailableLabelDefaultTextColor
         case .disabled:
             return FacilityOptionTableViewCell.Style.unavailableLabelDisabledTextColor
