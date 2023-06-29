@@ -29,6 +29,7 @@ final class FacilitiesViewController: UIViewController {
             action: #selector(selectButtonTapped)
         )
         button.tintColor = Style.actionButtonTintColor
+        button.isEnabled = viewModel.isSelectButtonEnabled
         return button
     }()
     
@@ -168,6 +169,10 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
     
     func updateSelectButtonTitle() {
         selectButton.title = viewModel.selectButtonTitle
+    }
+    
+    func updateSelectButtonState() {
+        selectButton.isEnabled = viewModel.isSelectButtonEnabled
     }
     
     func updateConfirmButtonState() {

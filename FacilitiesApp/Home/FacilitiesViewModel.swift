@@ -10,6 +10,7 @@ import Foundation
 protocol FacilitiesViewModelPresenter: AnyObject {
     func setNavigationTitle(_ title: String)
     func updateSelectButtonTitle()
+    func updateSelectButtonState()
     func updateConfirmButtonState()
     func startLoading()
     func stopLoading()
@@ -20,6 +21,7 @@ protocol FacilitiesViewModelPresenter: AnyObject {
 protocol FacilitiesViewModelable {
     var selectButtonTitle: String { get }
     var confirmButtonTitle: String { get }
+    var isSelectButtonEnabled: Bool { get }
     var isConfirmButtonEnabled: Bool { get }
     var doesErrorExist: Bool { get }
     var numberOfSections: Int { get }
@@ -50,7 +52,11 @@ final class FacilitiesViewModel: FacilitiesViewModelable {
     /// Keep a track of every excluded option
     private var excludedOptions: [FacilityOption]
     private var isSelectionEnabled: Bool
-    private var errorState: ErrorCellViewModel.State?
+    private var errorState: ErrorCellViewModel.State? {
+        didSet {
+            presenter?.updateSelectButtonState()
+        }
+    }
     
     private let dataHandler: FacilitiesDataHandler
     
@@ -74,6 +80,10 @@ extension FacilitiesViewModel {
     
     var confirmButtonTitle: String {
         return Constants.confirmTitle
+    }
+    
+    var isSelectButtonEnabled: Bool {
+        return !doesErrorExist
     }
     
     var isConfirmButtonEnabled: Bool {
@@ -132,7 +142,7 @@ extension FacilitiesViewModel {
     
     func getErrorCellViewModel(at indexPath: IndexPath) -> ErrorCellViewModelable? {
         guard let state = errorState else { return nil }
-        return ErrorCellViewModel(state: state)
+        return ErrorCellViewModel(state: state, listener: self)
     }
     
     func didSelectOption(at indexPath: IndexPath) {
@@ -259,6 +269,19 @@ private extension FacilitiesViewModel {
             }
         }
         return excludedOptions
+    }
+    
+}
+
+// MARK: - ErrorCellViewModelListener Methods
+extension FacilitiesViewModel: ErrorCellViewModelListener {
+    
+    func refreshButtonTapped() {
+        // Perform cleanup
+        selectedOptionsDict.removeAll()
+        excludedOptions.removeAll()
+        errorState = nil
+        fetchData()
     }
     
 }

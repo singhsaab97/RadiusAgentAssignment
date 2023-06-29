@@ -7,8 +7,14 @@
 
 import UIKit
 
+protocol ErrorCellViewModelListener: AnyObject {
+    func refreshButtonTapped()
+}
+
 protocol ErrorCellViewModelable {
     var state: ErrorCellViewModel.State { get }
+    var refreshButtonTitle: String { get }
+    func refreshButtonTapped()
 }
 
 final class ErrorCellViewModel: ErrorCellViewModelable {
@@ -21,8 +27,24 @@ final class ErrorCellViewModel: ErrorCellViewModelable {
     
     let state: State
     
-    init(state: State) {
+    private weak var listener: ErrorCellViewModelListener?
+    
+    init(state: State, listener: ErrorCellViewModelListener?) {
         self.state = state
+        self.listener = listener
+    }
+    
+}
+
+// MARK: - Exposed Helpers
+extension ErrorCellViewModel {
+    
+    var refreshButtonTitle: String {
+        return Constants.refreshTitle
+    }
+    
+    func refreshButtonTapped() {
+        listener?.refreshButtonTapped()
     }
     
 }
