@@ -21,6 +21,14 @@ struct Constants {
     static let unknownTitle = "Uh Oh!"
     static let unknownSubtitle = "There seems to be an issue fetching available facilities from the server"
     static let refreshTitle = "Refresh"
+    static let alertTitle = "Confirm booking?"
+    static let alertMessage = "Do you want to confirm your booking for"
+    static let alertPositiveTitle = "Yes"
+    static let alertNegativeTitle = "No"
+    static let bookingConfirmedTitle = "Congratulations!"
+    static let bookingConfirmedSubtitle = "Your booking has been confirmed for"
+    static let commaSeparator = ","
+    static let andSeparator = "and"
     static let baseApiURL = URL(string: "https://my-json-server.typicode.com/")
     static let commonApiHeaders = ["Content-Type": "application/json"]
     static let noInternetErrorCode: Int = 6

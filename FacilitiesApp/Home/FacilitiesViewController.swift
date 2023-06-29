@@ -16,7 +16,11 @@ final class FacilitiesViewController: UIViewController {
         static let actionButtonTintColor = Constants.primaryColor
         
         static let tableViewBackgroundColor = UIColor.clear
-        static let tableViewDefaultCellHeight = UITableView.automaticDimension
+        static let tableViewCellHeight = UITableView.automaticDimension
+        
+        static let popupViewHorizontalInset: CGFloat = 40
+        static let fadeAnimationDuration: TimeInterval = 0.3
+        static let scaleAnimationDuration: TimeInterval = 0.5
     }
         
     private let viewModel: FacilitiesViewModelable
@@ -49,6 +53,7 @@ final class FacilitiesViewController: UIViewController {
         let view = UITableView(frame: CGRect(), style: .plain)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = Style.tableViewBackgroundColor
+        view.rowHeight = Style.tableViewCellHeight
         view.delegate = self
         view.dataSource = self
         FacilityOptionTableViewCell.register(for: view)
@@ -62,6 +67,12 @@ final class FacilitiesViewController: UIViewController {
         view.hidesWhenStopped = true
         return view
     }()
+    
+    private var overlayView: OverlayView {
+        let view = OverlayView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }
     
     init(viewModel: FacilitiesViewModelable) {
         self.viewModel = viewModel
@@ -120,13 +131,6 @@ extension FacilitiesViewController: UITableViewDelegate {
         return viewModel.getHeader(for: section)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let errorCellHeight = tableView.bounds.height - (navigationController?.navigationBar.bounds.height ?? 0)
-        return viewModel.doesErrorExist
-            ? errorCellHeight
-            : Style.tableViewDefaultCellHeight
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         viewModel.didSelectOption(at: indexPath)
@@ -179,6 +183,11 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
         confirmButton.isEnabled = viewModel.isConfirmButtonEnabled
     }
     
+    func updateActionButtonsState(isEnabled: Bool) {
+        selectButton.isEnabled = isEnabled
+        confirmButton.isEnabled = isEnabled
+    }
+    
     func startLoading() {
         view.addSubview(spinnerView)
         spinnerView.snp.makeConstraints {
@@ -198,6 +207,34 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
     
     func reload() {
         tableView.reloadData()
+    }
+    
+    func present(_ viewController: UIViewController) {
+        navigationController?.present(viewController, animated: true)
+    }
+    
+    func show(_ popupView: BookingConfirmationView, completion: @escaping () -> Void) {
+        // Overlay
+        let overlayView = overlayView
+        view.addSubview(overlayView)
+        overlayView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        overlayView.bringToParent(with: Style.fadeAnimationDuration)
+        overlayView.onTap = { [weak overlayView, weak popupView] in
+            overlayView?.removeFromParent(with: Style.fadeAnimationDuration)
+            popupView?.removeFromParent(with: Style.fadeAnimationDuration) {
+                completion()
+            }
+        }
+        // Popup
+        view.addSubview(popupView)
+        popupView.translatesAutoresizingMaskIntoConstraints = false
+        popupView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(Style.popupViewHorizontalInset)
+            $0.centerY.equalToSuperview()
+        }
+        popupView.bringToParent(with: Style.scaleAnimationDuration)
     }
     
 }

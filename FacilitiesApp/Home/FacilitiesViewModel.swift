@@ -5,17 +5,20 @@
 //  Created by Abhijit Singh on 28/06/23.
 //
 
-import Foundation
+import UIKit
 
 protocol FacilitiesViewModelPresenter: AnyObject {
     func setNavigationTitle(_ title: String)
     func updateSelectButtonTitle()
     func updateSelectButtonState()
     func updateConfirmButtonState()
+    func updateActionButtonsState(isEnabled: Bool)
     func startLoading()
     func stopLoading()
     func reloadOptions(at indexPaths: [IndexPath])
     func reload()
+    func present(_ viewController: UIViewController)
+    func show(_ popupView: BookingConfirmationView, completion: @escaping () -> Void)
 }
 
 protocol FacilitiesViewModelable {
@@ -87,7 +90,7 @@ extension FacilitiesViewModel {
     }
     
     var isConfirmButtonEnabled: Bool {
-        return !selectedOptionsDict.isEmpty
+        return isSelectionEnabled && !selectedOptionsDict.isEmpty
     }
     
     var doesErrorExist: Bool {
@@ -108,11 +111,28 @@ extension FacilitiesViewModel {
     func selectButtonTapped() {
         isSelectionEnabled = !isSelectionEnabled
         presenter?.updateSelectButtonTitle()
+        presenter?.updateConfirmButtonState()
         presenter?.reload()
     }
     
     func confirmButtonTapped() {
-        // TODO
+        let selectedOptions = selectedOptionsDict
+            .sorted(by: { $0.value.id < $1.value.id })
+            .map { $0.value.name }
+            .joined
+        let alertController = UIAlertController(
+            title: Constants.alertTitle,
+            message: "\(Constants.alertMessage) \"\(selectedOptions)\"?",
+            preferredStyle: .alert
+        )
+        let positiveAction = UIAlertAction(title: Constants.alertPositiveTitle, style: .default) { [weak self] _ in
+            // Show confirmation popup
+            self?.showBookingConfirmationPopup(with: selectedOptions)
+        }
+        let negativeAction = UIAlertAction(title: Constants.alertNegativeTitle, style: .destructive)
+        alertController.addAction(positiveAction)
+        alertController.addAction(negativeAction)
+        presenter?.present(alertController)
     }
     
     func getNumberOfRows(in section: Int) -> Int {
@@ -269,6 +289,16 @@ private extension FacilitiesViewModel {
             }
         }
         return excludedOptions
+    }
+    
+    func showBookingConfirmationPopup(with selectedOptions: String) {
+        presenter?.updateActionButtonsState(isEnabled: false)
+        let viewModel = BookingConfirmationViewModel(facilityOptions: selectedOptions)
+        let view = BookingConfirmationView.loadFromNib()
+        view.viewModel = viewModel
+        presenter?.show(view) { [weak self] in
+            self?.presenter?.updateActionButtonsState(isEnabled: true)
+        }
     }
     
 }

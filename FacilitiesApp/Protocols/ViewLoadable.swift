@@ -27,3 +27,12 @@ extension ViewLoadable where Self: UITableViewCell {
     }
     
 }
+
+extension ViewLoadable where Self: UIView {
+    
+    static func loadFromNib() -> Self {
+        let nib = UINib(nibName: nibName, bundle: nil)
+        return nib.instantiate(withOwner: nil, options: nil).first as! Self
+    }
+    
+}

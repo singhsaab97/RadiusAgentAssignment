@@ -17,6 +17,10 @@
 		7C28A7A32A4D3A5D0068B89A /* ErrorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A7A22A4D3A5D0068B89A /* ErrorTableViewCell.swift */; };
 		7C28A7A52A4D3A6A0068B89A /* ErrorCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A7A42A4D3A6A0068B89A /* ErrorCellViewModel.swift */; };
 		7C28A7A72A4D3A760068B89A /* ErrorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C28A7A62A4D3A760068B89A /* ErrorTableViewCell.xib */; };
+		7C28A7AA2A4D5E430068B89A /* BookingConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A7A92A4D5E430068B89A /* BookingConfirmationView.swift */; };
+		7C28A7AC2A4D5E530068B89A /* BookingConfirmationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A7AB2A4D5E530068B89A /* BookingConfirmationViewModel.swift */; };
+		7C28A7AE2A4D5E660068B89A /* BookingConfirmationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C28A7AD2A4D5E660068B89A /* BookingConfirmationView.xib */; };
+		7C28A7B22A4D67B50068B89A /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A7B12A4D67B50068B89A /* OverlayView.swift */; };
 		7C76FB6C2A4BFD86001CEE92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76FB6B2A4BFD86001CEE92 /* AppDelegate.swift */; };
 		7C76FB6E2A4BFD86001CEE92 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76FB6D2A4BFD86001CEE92 /* SceneDelegate.swift */; };
 		7C76FB752A4BFD87001CEE92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C76FB742A4BFD87001CEE92 /* Assets.xcassets */; };
@@ -52,6 +56,10 @@
 		7C28A7A22A4D3A5D0068B89A /* ErrorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTableViewCell.swift; sourceTree = "<group>"; };
 		7C28A7A42A4D3A6A0068B89A /* ErrorCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCellViewModel.swift; sourceTree = "<group>"; };
 		7C28A7A62A4D3A760068B89A /* ErrorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorTableViewCell.xib; sourceTree = "<group>"; };
+		7C28A7A92A4D5E430068B89A /* BookingConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingConfirmationView.swift; sourceTree = "<group>"; };
+		7C28A7AB2A4D5E530068B89A /* BookingConfirmationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingConfirmationViewModel.swift; sourceTree = "<group>"; };
+		7C28A7AD2A4D5E660068B89A /* BookingConfirmationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BookingConfirmationView.xib; sourceTree = "<group>"; };
+		7C28A7B12A4D67B50068B89A /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		7C76FB682A4BFD86001CEE92 /* FacilitiesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FacilitiesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C76FB6B2A4BFD86001CEE92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C76FB6D2A4BFD86001CEE92 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,6 +148,24 @@
 			path = Error;
 			sourceTree = "<group>";
 		};
+		7C28A7A82A4D5E1A0068B89A /* Success */ = {
+			isa = PBXGroup;
+			children = (
+				7C28A7A92A4D5E430068B89A /* BookingConfirmationView.swift */,
+				7C28A7AB2A4D5E530068B89A /* BookingConfirmationViewModel.swift */,
+				7C28A7AD2A4D5E660068B89A /* BookingConfirmationView.xib */,
+			);
+			path = Success;
+			sourceTree = "<group>";
+		};
+		7C28A7B02A4D679B0068B89A /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				7C28A7B12A4D67B50068B89A /* OverlayView.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
 		7C76FB5F2A4BFD86001CEE92 = {
 			isa = PBXGroup;
 			children = (
@@ -164,6 +190,7 @@
 				7C76FB6B2A4BFD86001CEE92 /* AppDelegate.swift */,
 				7C76FB6D2A4BFD86001CEE92 /* SceneDelegate.swift */,
 				7C76FB7F2A4BFDC8001CEE92 /* Home */,
+				7C28A7B02A4D679B0068B89A /* Overlay */,
 				7C28A78C2A4C02E90068B89A /* APIConstructor */,
 				7C28A7952A4C0B4E0068B89A /* Response */,
 				7C28A7922A4C07210068B89A /* DataHandler */,
@@ -182,6 +209,7 @@
 				7C99393F2A4BFF3D00FF7C9E /* FacilitiesViewModel.swift */,
 				7C28A7992A4C88CC0068B89A /* Cell */,
 				7C28A7A12A4D3A410068B89A /* Error */,
+				7C28A7A82A4D5E1A0068B89A /* Success */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -273,6 +301,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C28A7AE2A4D5E660068B89A /* BookingConfirmationView.xib in Resources */,
 				7C28A7A72A4D3A760068B89A /* ErrorTableViewCell.xib in Resources */,
 				7C76FB782A4BFD87001CEE92 /* LaunchScreen.storyboard in Resources */,
 				7C28A79D2A4C89180068B89A /* FacilityOptionTableViewCell.xib in Resources */,
@@ -334,7 +363,10 @@
 				7C28A7A32A4D3A5D0068B89A /* ErrorTableViewCell.swift in Sources */,
 				7C28A7982A4C879C0068B89A /* Array+Extensions.swift in Sources */,
 				7C9939402A4BFF3D00FF7C9E /* FacilitiesViewModel.swift in Sources */,
+				7C28A7AA2A4D5E430068B89A /* BookingConfirmationView.swift in Sources */,
 				7C28A7A52A4D3A6A0068B89A /* ErrorCellViewModel.swift in Sources */,
+				7C28A7B22A4D67B50068B89A /* OverlayView.swift in Sources */,
+				7C28A7AC2A4D5E530068B89A /* BookingConfirmationViewModel.swift in Sources */,
 				7C76FB6C2A4BFD86001CEE92 /* AppDelegate.swift in Sources */,
 				7C9939452A4BFFCE00FF7C9E /* ViewLoadable.swift in Sources */,
 				7C28A78E2A4C03050068B89A /* FacilitiesAPIConstructor.swift in Sources */,
@@ -410,7 +442,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -464,7 +496,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -487,8 +519,9 @@
 				INFOPLIST_FILE = FacilitiesApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -516,8 +549,9 @@
 				INFOPLIST_FILE = FacilitiesApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
