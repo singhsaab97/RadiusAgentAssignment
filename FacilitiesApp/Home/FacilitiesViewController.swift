@@ -37,6 +37,18 @@ final class FacilitiesViewController: UIViewController {
         return button
     }()
     
+    private lazy var resetButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            title: viewModel.resetButtonTitle,
+            style: .plain,
+            target: self,
+            action: #selector(resetButtonTapped)
+        )
+        button.tintColor = Style.actionButtonTintColor
+        button.isEnabled = viewModel.isConfirmButtonEnabled
+        return button
+    }()
+    
     private lazy var confirmButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             title: viewModel.confirmButtonTitle,
@@ -102,7 +114,7 @@ private extension FacilitiesViewController {
     
     func addActionButtons() {
         navigationItem.leftBarButtonItem = selectButton
-        navigationItem.rightBarButtonItem = confirmButton
+        navigationItem.rightBarButtonItems = [confirmButton, resetButton]
     }
     
     func addTableView() {
@@ -115,6 +127,11 @@ private extension FacilitiesViewController {
     @objc
     func selectButtonTapped() {
         viewModel.selectButtonTapped()
+    }
+    
+    @objc
+    func resetButtonTapped() {
+        viewModel.resetButtonTapped()
     }
     
     @objc
@@ -179,12 +196,17 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
         selectButton.isEnabled = viewModel.isSelectButtonEnabled
     }
     
+    func updateResetButtonState() {
+        resetButton.isEnabled = viewModel.isResetButtonEnabled
+    }
+    
     func updateConfirmButtonState() {
         confirmButton.isEnabled = viewModel.isConfirmButtonEnabled
     }
     
     func updateActionButtonsState(isEnabled: Bool) {
         selectButton.isEnabled = isEnabled
+        resetButton.isEnabled = isEnabled
         confirmButton.isEnabled = isEnabled
     }
     
@@ -235,6 +257,12 @@ extension FacilitiesViewController: FacilitiesViewModelPresenter {
             $0.centerY.equalToSuperview()
         }
         popupView.bringToParent(with: Style.scaleAnimationDuration)
+        popupView.onCloseTap = { [weak overlayView, weak popupView] in
+            overlayView?.removeFromParent(with: Style.fadeAnimationDuration)
+            popupView?.removeFromParent(with: Style.fadeAnimationDuration) {
+                completion()
+            }
+        }
     }
     
 }

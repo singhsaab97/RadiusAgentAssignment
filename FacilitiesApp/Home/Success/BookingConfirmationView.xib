@@ -43,18 +43,33 @@
                         </stackView>
                     </subviews>
                 </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YxW-Yk-fjb">
+                    <rect key="frame" x="343.66666666666669" y="69" width="39.333333333333314" height="39.333333333333343"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="YxW-Yk-fjb" secondAttribute="height" id="NGB-WZ-dJU"/>
+                    </constraints>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="Button"/>
+                    <connections>
+                        <action selector="closeButtonTapped" destination="iN0-l3-epB" eventType="touchUpInside" id="peh-dM-pac"/>
+                    </connections>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <accessibility key="accessibilityConfiguration" identifier="BookingConfirmationView"/>
             <constraints>
+                <constraint firstItem="YxW-Yk-fjb" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="0.1" id="I79-3i-nze"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="alj-vU-sWc" secondAttribute="trailing" constant="40" id="LFm-vh-eTq"/>
                 <constraint firstItem="alj-vU-sWc" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="40" id="MU1-82-csi"/>
+                <constraint firstItem="YxW-Yk-fjb" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="NAE-iV-B9i"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="YxW-Yk-fjb" secondAttribute="trailing" constant="10" id="RWV-9Z-A9t"/>
                 <constraint firstItem="alj-vU-sWc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="40" id="UFF-nJ-dlC"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="alj-vU-sWc" secondAttribute="bottom" constant="40" id="aYI-bx-IAe"/>
                 <constraint firstItem="Hay-Ay-ogV" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="0.3" id="zfJ-cT-wFL"/>
             </constraints>
             <connections>
+                <outlet property="closeButton" destination="YxW-Yk-fjb" id="ZwG-bP-Pjo"/>
                 <outlet property="subtitleLabel" destination="L9i-my-8rf" id="zyA-ub-knR"/>
                 <outlet property="successImageView" destination="Hay-Ay-ogV" id="ctp-re-NpA"/>
                 <outlet property="titleLabel" destination="igX-cH-u2G" id="oZ5-sc-fXs"/>

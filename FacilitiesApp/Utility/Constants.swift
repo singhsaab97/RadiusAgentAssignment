@@ -11,6 +11,7 @@ struct Constants {
     
     static let selectTitle = "Select"
     static let cancelTitle = "Cancel"
+    static let resetTitle = "Reset"
     static let confirmTitle = "Confirm"
     static let facilitiesTitle = "Facilities"
     static let unavailableTitle = "Unavailable"

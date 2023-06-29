@@ -11,6 +11,7 @@ protocol FacilitiesViewModelPresenter: AnyObject {
     func setNavigationTitle(_ title: String)
     func updateSelectButtonTitle()
     func updateSelectButtonState()
+    func updateResetButtonState()
     func updateConfirmButtonState()
     func updateActionButtonsState(isEnabled: Bool)
     func startLoading()
@@ -23,14 +24,17 @@ protocol FacilitiesViewModelPresenter: AnyObject {
 
 protocol FacilitiesViewModelable {
     var selectButtonTitle: String { get }
+    var resetButtonTitle: String { get }
     var confirmButtonTitle: String { get }
     var isSelectButtonEnabled: Bool { get }
+    var isResetButtonEnabled: Bool { get }
     var isConfirmButtonEnabled: Bool { get }
     var doesErrorExist: Bool { get }
     var numberOfSections: Int { get }
     var presenter: FacilitiesViewModelPresenter? { get set }
     func screenDidLoad()
     func selectButtonTapped()
+    func resetButtonTapped()
     func confirmButtonTapped()
     func getNumberOfRows(in section: Int) -> Int
     func getHeader(for section: Int) -> String?
@@ -49,6 +53,7 @@ final class FacilitiesViewModel: FacilitiesViewModelable {
     /// Keep a track of every selected option to its corresponding facility id
     private var selectedOptionsDict: [String: FacilityOption] {
         didSet {
+            presenter?.updateResetButtonState()
             presenter?.updateConfirmButtonState()
         }
     }
@@ -81,12 +86,20 @@ extension FacilitiesViewModel {
         return isSelectionEnabled ? Constants.cancelTitle : Constants.selectTitle
     }
     
+    var resetButtonTitle: String {
+        return Constants.resetTitle
+    }
+    
     var confirmButtonTitle: String {
         return Constants.confirmTitle
     }
     
     var isSelectButtonEnabled: Bool {
         return !doesErrorExist
+    }
+    
+    var isResetButtonEnabled: Bool {
+        return !selectedOptionsDict.isEmpty
     }
     
     var isConfirmButtonEnabled: Bool {
@@ -112,6 +125,13 @@ extension FacilitiesViewModel {
         isSelectionEnabled = !isSelectionEnabled
         presenter?.updateSelectButtonTitle()
         presenter?.updateConfirmButtonState()
+        presenter?.reload()
+    }
+    
+    func resetButtonTapped() {
+        presenter?.updateResetButtonState()
+        selectedOptionsDict.removeAll()
+        excludedOptions.removeAll()
         presenter?.reload()
     }
     
@@ -296,8 +316,10 @@ private extension FacilitiesViewModel {
         let viewModel = BookingConfirmationViewModel(facilityOptions: selectedOptions)
         let view = BookingConfirmationView.loadFromNib()
         view.viewModel = viewModel
+        viewModel.presenter = view
         presenter?.show(view) { [weak self] in
             self?.presenter?.updateActionButtonsState(isEnabled: true)
+            self?.resetButtonTapped()
         }
     }
     

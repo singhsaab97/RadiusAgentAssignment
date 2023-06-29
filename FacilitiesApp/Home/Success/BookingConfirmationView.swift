@@ -19,7 +19,9 @@ final class BookingConfirmationView: UIView,
         static let springDamping: CGFloat = 0.7
         static let zeroTransform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         
-        static let successImageTintColor = Constants.primaryColor
+        static let closeButtonTintColor = Constants.primaryColor
+        
+        static let successImageTintColor = closeButtonTintColor
         
         static let titleLabelTextColor = UIColor.label
         static let titleLabelFont = UIFont.systemFont(ofSize: 18, weight: .medium)
@@ -34,6 +36,9 @@ final class BookingConfirmationView: UIView,
         }
     }
     
+    var onCloseTap: (() -> Void)?
+    
+    @IBOutlet private weak var closeButton: UIButton!
     @IBOutlet private weak var successImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var subtitleLabel: UILabel!
@@ -72,13 +77,20 @@ private extension BookingConfirmationView {
     func setup() {
         backgroundColor = Style.backgroundColor
         layer.cornerRadius = Style.cornerRadius
+        setupCloseButton()
         setupSuccessImageView()
         setupTitleLabel()
         setupSubtitleLabel()
     }
     
+    func setupCloseButton() {
+        closeButton.tintColor = Style.closeButtonTintColor
+        closeButton.setImage(viewModel?.closeButtonImage, for: .normal)
+        closeButton.setTitle(nil, for: .normal)
+    }
+    
     func setupSuccessImageView() {
-        successImageView.image = viewModel?.image?
+        successImageView.image = viewModel?.confirmationImage?
             .withTintColor(Style.successImageTintColor)
     }
     
@@ -92,6 +104,19 @@ private extension BookingConfirmationView {
         subtitleLabel.textColor = Style.subtitleLabelTextColor
         subtitleLabel.font = Style.subtitleLabelFont
         subtitleLabel.text = viewModel?.subtitle
+    }
+    
+    @IBAction func closeButtonTapped() {
+        viewModel?.closeButtonTapped()
+    }
+    
+}
+
+// MARK: - BookingConfirmationViewModelPresenter Methods
+extension BookingConfirmationView: BookingConfirmationViewModelPresenter {
+    
+    func invokeCloseCallback() {
+        onCloseTap?()
     }
     
 }
