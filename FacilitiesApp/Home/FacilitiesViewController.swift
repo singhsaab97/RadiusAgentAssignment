@@ -30,7 +30,7 @@ final class FacilitiesViewController: UIViewController {
     }()
     
     private lazy var spinnerView: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .large)
+        let view = UIActivityIndicatorView(style: .medium)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.hidesWhenStopped = true
         return view

@@ -49,14 +49,7 @@ final class FacilityOptionTableViewCell: UITableViewCell,
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        selectionView.layer.cornerRadius = min(
-            selectionView.bounds.width,
-            selectionView.bounds.height
-        ) / 2
-        selectionFillView.layer.cornerRadius = min(
-            selectionFillView.bounds.width,
-            selectionFillView.bounds.height
-        ) / 2
+        setCornerRadius()
     }
 
 }
@@ -87,6 +80,17 @@ private extension FacilityOptionTableViewCell {
         selectionView.layer.borderWidth = Style.selectionViewBorderWidth
         optionNameLabel.font = Style.optionNameLabelFont
         unavailableLabel.font = Style.unavailableLabelFont
+    }
+    
+    func setCornerRadius() {
+        selectionView.layer.cornerRadius = min(
+            selectionView.bounds.width,
+            selectionView.bounds.height
+        ) / 2
+        selectionFillView.layer.cornerRadius = min(
+            selectionFillView.bounds.width,
+            selectionFillView.bounds.height
+        ) / 2
     }
     
 }

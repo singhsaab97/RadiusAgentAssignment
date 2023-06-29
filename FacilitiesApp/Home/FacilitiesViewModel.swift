@@ -107,11 +107,12 @@ extension FacilitiesViewModel {
                 // Deselect this option
                 selectedOptionsDict.removeValue(forKey: facility.id)
                 presenter?.reloadOptions(at: [indexPath])
-                // TODO: Show everything enabled
+                enableAvailableOptions(for: facility, option: option)
             } else {
                 var indexPaths = [IndexPath]()
-                if let optionId = selectedOptionsDict[facility.id]?.id,
-                   let index = facility.options.firstIndex(where: { $0.id == optionId }) {
+                if let option = selectedOptionsDict[facility.id],
+                   let index = facility.options.firstIndex(where: { $0.id == option.id }) {
+                    enableAvailableOptions(for: facility, option: option)
                     let indexPath = IndexPath(row: index, section: indexPath.section)
                     indexPaths.append(indexPath)
                 }
@@ -138,8 +139,41 @@ extension FacilitiesViewModel {
 // MARK: - Private Helpers
 private extension FacilitiesViewModel {
     
+    func enableAvailableOptions(for facility: FacilityDetail, option: FacilityOption) {
+        // Enable selection for these options
+        let options = getExcludedOptions(for: facility, option: option)
+        var indexPaths = [IndexPath]()
+        facilities.enumerated().forEach { (sectionIndex, facility) in
+            for (rowIndex, option) in facility.options.enumerated() where options.contains(option) {
+                let previouslyExcludedOptions = getExcludedOptions(for: facility, option: option)
+                if !previouslyExcludedOptions.contains(option) {
+                    excludedOptions.removeAll(where: { $0 == option })
+                }
+                let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
+                indexPaths.append(indexPath)
+            }
+        }
+        presenter?.reloadOptions(at: indexPaths)
+    }
+    
     func updateAvailableOptions(for facility: FacilityDetail, option: FacilityOption) {
         excludedOptions.removeAll()
+        let options = getExcludedOptions(for: facility, option: option)
+        options.forEach { option in
+            excludedOptions.append(option)
+        }
+        var indexPaths = [IndexPath]()
+        facilities.enumerated().forEach { (sectionIndex, facility) in
+            for (rowIndex, option) in facility.options.enumerated() where excludedOptions.contains(option) {
+                let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
+                indexPaths.append(indexPath)
+            }
+        }
+        presenter?.reloadOptions(at: indexPaths)
+    }
+    
+    func getExcludedOptions(for facility: FacilityDetail, option: FacilityOption) -> [FacilityOption] {
+        var excludedOptions = [FacilityOption]()
         // Retrieve exclusions for the selected option
         let exclusionsForOption = exclusions.filter { exclusionSet in
             return exclusionSet.contains { exclusion in
@@ -158,14 +192,7 @@ private extension FacilitiesViewModel {
                 }
             }
         }
-        var indexPaths = [IndexPath]()
-        facilities.enumerated().forEach { (sectionIndex, facility) in
-            for (rowIndex, option) in facility.options.enumerated() where excludedOptions.contains(option) {
-                let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
-                indexPaths.append(indexPath)
-            }
-        }
-        presenter?.reloadOptions(at: indexPaths)
+        return excludedOptions
     }
     
 }
