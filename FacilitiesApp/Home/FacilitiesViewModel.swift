@@ -21,6 +21,7 @@ protocol FacilitiesViewModelable {
     var selectButtonTitle: String { get }
     var confirmButtonTitle: String { get }
     var isConfirmButtonEnabled: Bool { get }
+    var doesErrorExist: Bool { get }
     var numberOfSections: Int { get }
     var presenter: FacilitiesViewModelPresenter? { get set }
     func screenDidLoad()
@@ -28,7 +29,8 @@ protocol FacilitiesViewModelable {
     func confirmButtonTapped()
     func getNumberOfRows(in section: Int) -> Int
     func getHeader(for section: Int) -> String?
-    func getCellViewModel(at indexPath: IndexPath) -> FacilityOptionCellViewModelable?
+    func getFacilityCellViewModel(at indexPath: IndexPath) -> FacilityOptionCellViewModelable?
+    func getErrorCellViewModel(at indexPath: IndexPath) -> ErrorCellViewModelable?
     func didSelectOption(at indexPath: IndexPath)
 }
 
@@ -48,6 +50,7 @@ final class FacilitiesViewModel: FacilitiesViewModelable {
     /// Keep a track of every excluded option
     private var excludedOptions: [FacilityOption]
     private var isSelectionEnabled: Bool
+    private var errorState: ErrorCellViewModel.State?
     
     private let dataHandler: FacilitiesDataHandler
     
@@ -77,26 +80,17 @@ extension FacilitiesViewModel {
         return !selectedOptionsDict.isEmpty
     }
     
+    var doesErrorExist: Bool {
+        return errorState != nil
+    }
+    
     var numberOfSections: Int {
-        return facilities.count
+        return doesErrorExist ? 1 : facilities.count
     }
     
     func screenDidLoad() {
         // Fetch response model
-        dataHandler.fetchData { [weak self] state in
-            switch state {
-            case .loading:
-                self?.presenter?.startLoading()
-            case let .response(model):
-                self?.facilities = model.facilities
-                self?.exclusions = model.exclusions
-                self?.presenter?.stopLoading()
-                self?.presenter?.reload()
-            case let .error(message):
-                // TODO
-                self?.presenter?.stopLoading()
-            }
-        }
+        fetchData()
         // Set navigation title
         presenter?.setNavigationTitle(Constants.facilitiesTitle)
     }
@@ -112,6 +106,7 @@ extension FacilitiesViewModel {
     }
     
     func getNumberOfRows(in section: Int) -> Int {
+        guard !doesErrorExist else { return 1 }
         guard let facility = facilities[safe: section] else { return 0 }
         return facility.options.count
     }
@@ -121,7 +116,7 @@ extension FacilitiesViewModel {
         return facility.name
     }
     
-    func getCellViewModel(at indexPath: IndexPath) -> FacilityOptionCellViewModelable? {
+    func getFacilityCellViewModel(at indexPath: IndexPath) -> FacilityOptionCellViewModelable? {
         guard let facility = facilities[safe: indexPath.section],
               let option = facility.options[safe: indexPath.item] else { return nil }
         var state = FacilityOptionCellViewModel.State.deselected
@@ -133,6 +128,11 @@ extension FacilitiesViewModel {
             state = .selected
         }
         return FacilityOptionCellViewModel(option: option, state: state)
+    }
+    
+    func getErrorCellViewModel(at indexPath: IndexPath) -> ErrorCellViewModelable? {
+        guard let state = errorState else { return nil }
+        return ErrorCellViewModel(state: state)
     }
     
     func didSelectOption(at indexPath: IndexPath) {
@@ -176,6 +176,34 @@ extension FacilitiesViewModel {
 
 // MARK: - Private Helpers
 private extension FacilitiesViewModel {
+    
+    func fetchData() {
+        dataHandler.fetchData { [weak self] state in
+            switch state {
+            case .loading:
+                self?.presenter?.startLoading()
+            case let .response(model):
+                self?.presenter?.stopLoading()
+                let facilities = model.facilities
+                guard facilities.isEmpty else {
+                    self?.facilities = facilities
+                    self?.exclusions = model.exclusions
+                    self?.presenter?.reload()
+                    return
+                }
+                self?.errorState = .noData
+                self?.presenter?.reload()
+            case .noInternet:
+                self?.presenter?.stopLoading()
+                self?.errorState = .noInternet
+                self?.presenter?.reload()
+            case .error:
+                self?.presenter?.stopLoading()
+                self?.errorState = .unknown
+                self?.presenter?.reload()
+            }
+        }
+    }
     
     func enableAvailableOptions(for facility: FacilityDetail, option: FacilityOption) {
         // Enable selection for these options

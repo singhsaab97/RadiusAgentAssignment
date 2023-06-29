@@ -14,6 +14,9 @@
 		7C28A79B2A4C88E30068B89A /* FacilityOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A79A2A4C88E30068B89A /* FacilityOptionTableViewCell.swift */; };
 		7C28A79D2A4C89180068B89A /* FacilityOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C28A79C2A4C89170068B89A /* FacilityOptionTableViewCell.xib */; };
 		7C28A79F2A4C8BCB0068B89A /* FacilityOptionCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A79E2A4C8BCB0068B89A /* FacilityOptionCellViewModel.swift */; };
+		7C28A7A32A4D3A5D0068B89A /* ErrorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A7A22A4D3A5D0068B89A /* ErrorTableViewCell.swift */; };
+		7C28A7A52A4D3A6A0068B89A /* ErrorCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28A7A42A4D3A6A0068B89A /* ErrorCellViewModel.swift */; };
+		7C28A7A72A4D3A760068B89A /* ErrorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C28A7A62A4D3A760068B89A /* ErrorTableViewCell.xib */; };
 		7C76FB6C2A4BFD86001CEE92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76FB6B2A4BFD86001CEE92 /* AppDelegate.swift */; };
 		7C76FB6E2A4BFD86001CEE92 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76FB6D2A4BFD86001CEE92 /* SceneDelegate.swift */; };
 		7C76FB752A4BFD87001CEE92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C76FB742A4BFD87001CEE92 /* Assets.xcassets */; };
@@ -46,6 +49,9 @@
 		7C28A79A2A4C88E30068B89A /* FacilityOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityOptionTableViewCell.swift; sourceTree = "<group>"; };
 		7C28A79C2A4C89170068B89A /* FacilityOptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FacilityOptionTableViewCell.xib; sourceTree = "<group>"; };
 		7C28A79E2A4C8BCB0068B89A /* FacilityOptionCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityOptionCellViewModel.swift; sourceTree = "<group>"; };
+		7C28A7A22A4D3A5D0068B89A /* ErrorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTableViewCell.swift; sourceTree = "<group>"; };
+		7C28A7A42A4D3A6A0068B89A /* ErrorCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCellViewModel.swift; sourceTree = "<group>"; };
+		7C28A7A62A4D3A760068B89A /* ErrorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorTableViewCell.xib; sourceTree = "<group>"; };
 		7C76FB682A4BFD86001CEE92 /* FacilitiesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FacilitiesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C76FB6B2A4BFD86001CEE92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C76FB6D2A4BFD86001CEE92 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +130,16 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		7C28A7A12A4D3A410068B89A /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				7C28A7A22A4D3A5D0068B89A /* ErrorTableViewCell.swift */,
+				7C28A7A42A4D3A6A0068B89A /* ErrorCellViewModel.swift */,
+				7C28A7A62A4D3A760068B89A /* ErrorTableViewCell.xib */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
 		7C76FB5F2A4BFD86001CEE92 = {
 			isa = PBXGroup;
 			children = (
@@ -165,6 +181,7 @@
 				7C99393D2A4BFF0A00FF7C9E /* FacilitiesViewController.swift */,
 				7C99393F2A4BFF3D00FF7C9E /* FacilitiesViewModel.swift */,
 				7C28A7992A4C88CC0068B89A /* Cell */,
+				7C28A7A12A4D3A410068B89A /* Error */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -256,6 +273,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C28A7A72A4D3A760068B89A /* ErrorTableViewCell.xib in Resources */,
 				7C76FB782A4BFD87001CEE92 /* LaunchScreen.storyboard in Resources */,
 				7C28A79D2A4C89180068B89A /* FacilityOptionTableViewCell.xib in Resources */,
 				7C76FB752A4BFD87001CEE92 /* Assets.xcassets in Resources */,
@@ -313,8 +331,10 @@
 			files = (
 				7C99393E2A4BFF0A00FF7C9E /* FacilitiesViewController.swift in Sources */,
 				7C28A79B2A4C88E30068B89A /* FacilityOptionTableViewCell.swift in Sources */,
+				7C28A7A32A4D3A5D0068B89A /* ErrorTableViewCell.swift in Sources */,
 				7C28A7982A4C879C0068B89A /* Array+Extensions.swift in Sources */,
 				7C9939402A4BFF3D00FF7C9E /* FacilitiesViewModel.swift in Sources */,
+				7C28A7A52A4D3A6A0068B89A /* ErrorCellViewModel.swift in Sources */,
 				7C76FB6C2A4BFD86001CEE92 /* AppDelegate.swift in Sources */,
 				7C9939452A4BFFCE00FF7C9E /* ViewLoadable.swift in Sources */,
 				7C28A78E2A4C03050068B89A /* FacilitiesAPIConstructor.swift in Sources */,

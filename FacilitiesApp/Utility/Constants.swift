@@ -14,8 +14,15 @@ struct Constants {
     static let confirmTitle = "Confirm"
     static let facilitiesTitle = "Facilities"
     static let unavailableTitle = "Unavailable"
+    static let noDataTitle = "Data Unavailable"
+    static let noDataSubtitle = "Sorry, no facilities are available at the moment. You may recheck in some time"
+    static let noInternetTitle = "No Internet"
+    static let noInternetSubtitle = "Your internet connection appears to be offline. Please check and try again"
+    static let unknownTitle = "Uh Oh!"
+    static let unknownSubtitle = "There seems to be an issue fetching available facilities from the server. Please try refreshing"
     static let baseApiURL = URL(string: "https://my-json-server.typicode.com/")
     static let commonApiHeaders = ["Content-Type": "application/json"]
+    static let noInternetErrorCode: Int = 6
     static let primaryColor = UIColor(red: 35 / 255, green: 166 / 255, blue: 247 / 255, alpha: 1)
     
 }

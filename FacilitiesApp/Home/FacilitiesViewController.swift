@@ -16,6 +16,7 @@ final class FacilitiesViewController: UIViewController {
         static let actionButtonTintColor = Constants.primaryColor
         
         static let tableViewBackgroundColor = UIColor.clear
+        static let tableViewDefaultCellHeight = UITableView.automaticDimension
     }
         
     private let viewModel: FacilitiesViewModelable
@@ -47,10 +48,10 @@ final class FacilitiesViewController: UIViewController {
         let view = UITableView(frame: CGRect(), style: .plain)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = Style.tableViewBackgroundColor
-        view.rowHeight = UITableView.automaticDimension
         view.delegate = self
         view.dataSource = self
         FacilityOptionTableViewCell.register(for: view)
+        ErrorTableViewCell.register(for: view)
         return view
     }()
     
@@ -118,6 +119,13 @@ extension FacilitiesViewController: UITableViewDelegate {
         return viewModel.getHeader(for: section)
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let errorCellHeight = tableView.bounds.height - (navigationController?.navigationBar.bounds.height ?? 0)
+        return viewModel.doesErrorExist
+            ? errorCellHeight
+            : Style.tableViewDefaultCellHeight
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         viewModel.didSelectOption(at: indexPath)
@@ -137,10 +145,16 @@ extension FacilitiesViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cellViewModel = viewModel.getCellViewModel(at: indexPath) else { return UITableViewCell() }
-        let optionCell = FacilityOptionTableViewCell.dequeReusableCell(from: tableView, at: indexPath)
-        optionCell.configure(with: cellViewModel)
-        return optionCell
+        guard viewModel.doesErrorExist else {
+            guard let cellViewModel = viewModel.getFacilityCellViewModel(at: indexPath) else { return UITableViewCell() }
+            let optionCell = FacilityOptionTableViewCell.dequeReusableCell(from: tableView, at: indexPath)
+            optionCell.configure(with: cellViewModel)
+            return optionCell
+        }
+        guard let cellViewModel = viewModel.getErrorCellViewModel(at: indexPath) else { return UITableViewCell() }
+        let errorCell = ErrorTableViewCell.dequeReusableCell(from: tableView, at: indexPath)
+        errorCell.configure(with: cellViewModel)
+        return errorCell
     }
     
 }

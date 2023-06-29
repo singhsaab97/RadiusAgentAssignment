@@ -14,7 +14,8 @@ final class FacilitiesDataHandler {
     enum State {
         case loading
         case response(ResponseModel)
-        case error(String)
+        case noInternet
+        case error
     }
     
     private lazy var apiClient: MoyaProvider<FacilitiesAPIConstructor> = {
@@ -33,7 +34,9 @@ extension FacilitiesDataHandler {
             case let .success(response):
                 self?.decodeData(from: response, completion: completion)
             case let .failure(error):
-                completion(.error(error.localizedDescription))
+                error.errorCode == Constants.noInternetErrorCode
+                    ? completion(.noInternet)
+                    : completion(.error)
             }
         }
     }
@@ -49,7 +52,7 @@ private extension FacilitiesDataHandler {
             let model = try decoder.decode(ResponseModel.self, from: response.data)
             completion(.response(model))
         } catch {
-            completion(.error(error.localizedDescription))
+            completion(.error)
         }
     }
     
